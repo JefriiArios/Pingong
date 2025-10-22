@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pingpong Game</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background: linear-gradient(45deg, #0f0f23, #1a1a2e, #16213e, #0f0f23);
+        background-size: 400% 400%;
+        animation: bgShift 15s ease infinite;
+        font-family: "Orbitron", sans-serif;
+        color: #fff;
+        overflow: hidden;
+        position: relative;
+      }
+      @keyframes bgShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Partikel Bergerak di Background */
+      .particle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: rgba(0, 255, 255, 0.3);
+        border-radius: 50%;
+        animation: float 10s linear infinite;
+      }
+      .particle:nth-child(odd) {
+        animation-duration: 12s;
+        animation-direction: reverse;
+      }
+      .particle:nth-child(even) {
+        animation-duration: 8s;
+        background: rgba(255, 0, 255, 0.3);
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) translateX(0);
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) translateX(100vw);
+          opacity: 0;
+        }
+      }
+
+      canvas {
+        border: 3px solid #00ffff;
+        box-shadow: 0 0 20px #00ffff;
+        background: rgba(0, 0, 0, 0.8);
+        position: relative;
+        z-index: 10;
+      }
+      #score {
+        position: absolute;
+        top: 20px;
+        font-size: 28px;
+        text-align: center;
+        width: 100%;
+        color: #ff00ff;
+        text-shadow: 0 0 10px #ff00ff;
+        animation: scoreGlow 2s ease-in-out infinite alternate;
+        z-index: 20;
+      }
+      @keyframes scoreGlow {
+        from {
+          text-shadow: 0 0 10px #ff00ff;
+        }
+        to {
+          text-shadow: 0 0 20px #ff00ff;
+        }
+      }
+
+      #credit {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #ff00ff;
+        text-shadow: 0 0 10px #ff00ff;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 2px solid #ff00ff;
+        animation: typing 3s steps(17, end), blink-caret 0.75s step-end infinite,
+          glow 2s ease-in-out infinite alternate;
+        z-index: 20;
+      }
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+      @keyframes blink-caret {
+        from,
+        to {
+          border-color: transparent;
+        }
+        50% {
+          border-color: #ff00ff;
+        }
+      }
+      @keyframes glow {
+        from {
+          text-shadow: 0 0 10px #ff00ff;
+        }
+        to {
+          text-shadow: 0 0 20px #ff00ff;
+        }
+      }
+
+      /* Tambahan partikel statis untuk efek */
+      .static-particle {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 0, 0.5);
+        border-radius: 50%;
+        animation: twinkle 3s ease-in-out infinite;
+      }
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.5);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Partikel Bergerak -->
+    <div class="particle" style="left: 10%; animation-delay: 0s"></div>
+    <div class="particle" style="left: 20%; animation-delay: 1s"></div>
+    <div class="particle" style="left: 30%; animation-delay: 2s"></div>
+    <div class="particle" style="left: 40%; animation-delay: 3s"></div>
+    <div class="particle" style="left: 50%; animation-delay: 4s"></div>
+    <div class="particle" style="left: 60%; animation-delay: 5s"></div>
+    <div class="particle" style="left: 70%; animation-delay: 6s"></div>
+    <div class="particle" style="left: 80%; animation-delay: 7s"></div>
+    <div class="particle" style="left: 90%; animation-delay: 8s"></div>
+    <div class="particle" style="left: 15%; animation-delay: 9s"></div>
+    <div class="particle" style="left: 25%; animation-delay: 10s"></div>
+    <div class="particle" style="left: 35%; animation-delay: 11s"></div>
+    <div class="particle" style="left: 45%; animation-delay: 12s"></div>
+    <div class="particle" style="left: 55%; animation-delay: 13s"></div>
+    <div class="particle" style="left: 65%; animation-delay: 14s"></div>
+    <div class="particle" style="left: 75%; animation-delay: 15s"></div>
+    <div class="particle" style="left: 85%; animation-delay: 16s"></div>
+    <div class="particle" style="left: 95%; animation-delay: 17s"></div>
+
+    <!-- Partikel Statis -->
+    <div class="static-particle" style="top: 20%; left: 20%"></div>
+    <div class="static-particle" style="top: 40%; left: 60%"></div>
+    <div class="static-particle" style="top: 60%; left: 30%"></div>
+    <div class="static-particle" style="top: 80%; left: 70%"></div>
+    <div class="static-particle" style="top: 30%; left: 80%"></div>
+    <div class="static-particle" style="top: 50%; left: 10%"></div>
+    <div class="static-particle" style="top: 70%; left: 50%"></div>
+    <div class="static-particle" style="top: 10%; left: 40%"></div>
+
+    <div id="score">Player 1: 0 | Player 2: 0</div>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <div id="credit">create by Arios0_</div>
+
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+      const scoreDisplay = document.getElementById("score");
+
+      // Game variables
+      let ballX = canvas.width / 2;
+      let ballY = canvas.height / 2;
+      let ballSpeedX = 5;
+      let ballSpeedY = 5;
+      const ballRadius = 10;
+
+      const paddleWidth = 10;
+      const paddleHeight = 100;
+      let paddle1Y = canvas.height / 2 - paddleHeight / 2;
+      let paddle2Y = canvas.height / 2 - paddleHeight / 2;
+      const paddleSpeed = 6;
+
+      let player1Score = 0;
+      let player2Score = 0;
+
+      // Controls
+      let keys = {};
+
+      document.addEventListener("keydown", (e) => {
+        keys[e.key] = true;
+      });
+
+      document.addEventListener("keyup", (e) => {
+        keys[e.key] = false;
+      });
+
+      function update() {
+        // Move paddles
+        if (keys["w"] && paddle1Y > 0) paddle1Y -= paddleSpeed;
+        if (keys["s"] && paddle1Y < canvas.height - paddleHeight)
+          paddle1Y += paddleSpeed;
+        if (keys["ArrowUp"] && paddle2Y > 0) paddle2Y -= paddleSpeed;
+        if (keys["ArrowDown"] && paddle2Y < canvas.height - paddleHeight)
+          paddle2Y += paddleSpeed;
+
+        // Move ball
+        ballX += ballSpeedX;
+        ballY += ballSpeedY;
+
+        // Ball collision with top/bottom
+        if (ballY - ballRadius < 0 || ballY + ballRadius > canvas.height) {
+          ballSpeedY = -ballSpeedY;
+        }
+
+        // Ball collision with paddles
+        if (
+          ballX - ballRadius < paddleWidth &&
+          ballY > paddle1Y &&
+          ballY < paddle1Y + paddleHeight
+        ) {
+          ballSpeedX = -ballSpeedX;
+        }
+        if (
+          ballX + ballRadius > canvas.width - paddleWidth &&
+          ballY > paddle2Y &&
+          ballY < paddle2Y + paddleHeight
+        ) {
+          ballSpeedX = -ballSpeedX;
+        }
+
+        // Score and reset
+        if (ballX < 0) {
+          player2Score++;
+          resetBall();
+        }
+        if (ballX > canvas.width) {
+          player1Score++;
+          resetBall();
+        }
+
+        scoreDisplay.textContent = `Player 1: ${player1Score} | Player 2: ${player2Score}`;
+      }
+
+      function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = -ballSpeedX; // Change direction
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw paddles with glow
+        ctx.shadowColor = "#00ffff";
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = "#00ffff";
+        ctx.fillRect(0, paddle1Y, paddleWidth, paddleHeight);
+        ctx.fillRect(
+          canvas.width - paddleWidth,
+          paddle2Y,
+          paddleWidth,
+          paddleHeight
+        );
+        ctx.shadowBlur = 0; // Reset shadow
+
+        // Draw ball with glow
+        ctx.shadowColor = "#ff00ff";
+        ctx.shadowBlur = 15;
+        ctx.beginPath();
+        ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+        ctx.fillStyle = "#ff00ff";
+        ctx.fill();
+        ctx.shadowBlur = 0; // Reset shadow
+
+        // Draw center line
+        ctx.setLineDash([5, 15]);
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2, 0);
+        ctx.lineTo(canvas.width / 2, canvas.height);
+        ctx.strokeStyle = "#ffffff";
+        ctx.stroke();
+      }
+
+      function gameLoop() {
+        update();
+        draw();
+        requestAnimationFrame(gameLoop);
+      }
+
+      gameLoop();
+    </script>
+  </body>
+</html>
